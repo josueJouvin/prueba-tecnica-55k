@@ -22,6 +22,11 @@ function App() {
     setSortByCountry(!sortByCountry)
   }
 
+  const handleDeleteUser = (userId: string) => {
+    const filteredUsers = users.filter(user => user.login.uuid !== userId)
+    setUser(filteredUsers)
+  }
+
   const sortUsers = sortByCountry ? [...users].sort((a, b) => {return a.location.country.localeCompare(b.location.country)}): users
 
   return (
@@ -54,7 +59,7 @@ function App() {
                 <td>{user.name.last}</td>
                 <td>{user.location.country}</td>
                 <td>
-                  <button>Eliminar</button>
+                  <button onClick={() => handleDeleteUser(user.login.uuid)}>Eliminar</button>
                 </td>
               </tr>
             ))
