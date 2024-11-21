@@ -1,21 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "./types";
 
 function App() {
   const [users, setUser] = useState<User[]>([])
   const [color, setColor] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
+  const originalUsers = useRef([])
 
   useEffect(( ) => {
     fetch(`https://randomuser.me/api/?results=100`)
     .then(response => response.json())
     .then(data => {
       setUser(data.results)
+      originalUsers.current = data.results
+    })
+    .catch(err => {
+      console.log(err)
     })
   },[])
 
   const toggleColor = () => {
     setColor(!color)
+  }
+
+  const handleResetUsers = () =>{
+    setUser(originalUsers.current)
   }
 
   const toggleOrderCountry = () =>{
@@ -35,7 +44,7 @@ function App() {
       <div className="filters">
         <button onClick={toggleColor}>Colorear Filas</button>
         <button onClick={toggleOrderCountry}>{sortByCountry ? "No ordenar por pais" : "Ordenar por pais"}</button>
-
+        <button onClick={handleResetUsers}>Resetear Estado</button>
       </div>
 
       <table className={`table ${color ? "colorRows" : ""}`}>
