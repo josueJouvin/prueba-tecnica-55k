@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { User } from "./types";
 
 function App() {
@@ -37,9 +37,16 @@ function App() {
     setUser(filteredUsers)
   }
 
-  const searchUsers = search ? users.filter(user => user.location.country.toLowerCase().includes(search.toLowerCase())) : users
+  const searchUsers = useMemo(() => {
+    console.log("calculate serchUsers")
 
-  const sortUsers = sortByCountry ? [...searchUsers].sort((a, b) => {return a.location.country.localeCompare(b.location.country)}): searchUsers
+    return search ? users.filter(user => user.location.country.toLowerCase().includes(search.toLowerCase())) : users
+  },[users, search])
+
+  const sortUsers = useMemo(() => {
+    console.log("calculate sortedUsers")
+    return sortByCountry ? [...searchUsers].sort((a, b) => {return a.location.country.localeCompare(b.location.country)}): searchUsers
+  },[searchUsers, sortByCountry])
 
   return (
     <>
