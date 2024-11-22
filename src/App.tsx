@@ -5,6 +5,7 @@ function App() {
   const [users, setUser] = useState<User[]>([])
   const [color, setColor] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
+  const [search, setSearch] = useState<string | null>(null)
   const originalUsers = useRef([])
 
   useEffect(( ) => {
@@ -36,7 +37,9 @@ function App() {
     setUser(filteredUsers)
   }
 
-  const sortUsers = sortByCountry ? [...users].sort((a, b) => {return a.location.country.localeCompare(b.location.country)}): users
+  const searchUsers = search ? users.filter(user => user.location.country.toLowerCase().includes(search.toLowerCase())) : users
+
+  const sortUsers = sortByCountry ? [...searchUsers].sort((a, b) => {return a.location.country.localeCompare(b.location.country)}): searchUsers
 
   return (
     <>
@@ -45,6 +48,7 @@ function App() {
         <button onClick={toggleColor}>Colorear Filas</button>
         <button onClick={toggleOrderCountry}>{sortByCountry ? "No ordenar por pais" : "Ordenar por pais"}</button>
         <button onClick={handleResetUsers}>Resetear Estado</button>
+        <input type="text" placeholder="Buscar por País"  onChange={(e) => setSearch(e.target.value)} />
       </div>
 
       <table className={`table ${color ? "colorRows" : ""}`}>
