@@ -55,3 +55,7 @@ button:hover{
 .colorRows tbody tr:nth-child(even) {
   background: #555;
 }
+
+.pointer{
+  cursor: cell;
+}
